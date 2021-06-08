@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow PUBLIC "-//OpenSymphony Group//DTD OSWorkflow 2.6//EN" "http://www.opensymphony.com/osworkflow/workflow_2_8.dtd">
+<workflow>
+  <meta name="someMetaProperty">someMetaValue</meta>
+  <meta name="someOtherMetaProperty">someOtherMetaValue</meta>
+  <meta name="someClassNameMetaProperty">java.lang.Object</meta>
+
+  <registers>
+    <register id="my-id" type="some-type" variable-name="someVariableName">
+      <arg name="class.name">dev.bradhandy.NoopRegister</arg>
+    </register>
+
+    <!--
+      registers that aren't checked directly. they're only here for the collection size check.
+      -->
+    <register id="my-other-id" type="some-other-type" variable-name="someOtherVariableName" />
+    <register id="my-yet-another-id" type="some-new-type" variable-name="someNewVariableName" />
+  </registers>
+</workflow>

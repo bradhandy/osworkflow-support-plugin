@@ -1,0 +1,22 @@
+<idea-plugin>
+  <id>dev.bradhandy.workflow</id>
+  <name>OS Workflow Support</name>
+  <version></version>
+  <vendor email="brad.handy@gmail.com"
+      url="https://github.com/bradhandy/osworkflow-intellij-plugin">
+    Brad Handy
+  </vendor>
+
+  <idea-version since-build="" until-build="" />
+
+  <description><![CDATA[Support for working with OS Workflow configuration files.]]></description>
+
+  <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.xml</depends>
+  <depends>com.intellij.modules.java</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <dom.fileMetaData implementation="dev.bradhandy.osworkflow.model.WorkflowFileDescription"
+        rootTagName="workflow" />
+  </extensions>
+</idea-plugin>

@@ -1,0 +1,41 @@
+plugins {
+  id 'java'
+  id 'org.jetbrains.intellij' version '0.7.3'
+}
+
+group 'dev.bradhandy'
+version '1.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+  testImplementation 'org.assertj:assertj-core:3.19.0'
+
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+}
+
+test {
+  useJUnitPlatform()
+}
+
+intellij {
+  type 'IU'
+  version 'IU-LATEST-EAP-SNAPSHOT'
+  pluginName 'OS Workflow Support'
+  plugins = [
+      'java',
+      'Spring',
+      'java-i18n',  // required for the Spring dependency
+      'properties'  // required by java-i18n
+  ]
+  patchPluginXml {
+    sinceBuild '2021.1'
+    version project.version
+  }
+  buildPlugin {
+    baseName 'OSWorkflow'
+  }
+}
