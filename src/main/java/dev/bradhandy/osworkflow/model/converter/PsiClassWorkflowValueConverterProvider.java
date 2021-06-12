@@ -6,11 +6,9 @@ import com.intellij.psi.PsiType;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.Converter;
 import com.intellij.util.xml.GenericDomValue;
-import com.intellij.util.xml.converters.values.GenericDomValueConvertersRegistry;
 import dev.bradhandy.osworkflow.model.WorkflowValue;
 
-public class WorkflowValuePsiClassConverterProvider
-    implements GenericDomValueConvertersRegistry.Provider {
+public class PsiClassWorkflowValueConverterProvider implements WorkflowValueConverterProvider {
 
   @Override
   public Converter getConverter() {

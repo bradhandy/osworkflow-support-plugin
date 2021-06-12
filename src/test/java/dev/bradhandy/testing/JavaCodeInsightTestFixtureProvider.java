@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
+
 public class JavaCodeInsightTestFixtureProvider
     implements ParameterResolver, BeforeAllCallback, AfterAllCallback {
 
@@ -70,7 +72,7 @@ public class JavaCodeInsightTestFixtureProvider
     Optional<PluginTestDataPath> pluginTestDataPathAnnotation =
         extensionContext
             .getTestClass()
-            .map(testClass -> testClass.getAnnotation(PluginTestDataPath.class));
+            .flatMap(testClass -> findAnnotation(testClass, PluginTestDataPath.class));
 
     String testDataPath =
         pluginTestDataPathAnnotation.map(PluginTestDataPath::value).orElse(DEFAULT_TEST_DATA_PATH);
@@ -116,13 +118,14 @@ public class JavaCodeInsightTestFixtureProvider
         .map(
             (testClass) -> {
               ProjectModules projectModulesAnnotation =
-                  testClass.getAnnotation(ProjectModules.class);
+                  findAnnotation(testClass, ProjectModules.class).orElse(null);
               ProjectModule[] projectModules =
                   (projectModulesAnnotation == null)
                       ? EMPTY_PROJECT_MODULE_ARRAY
                       : projectModulesAnnotation.value();
               if (projectModules.length == 0) {
-                ProjectModule projectModule = testClass.getAnnotation(ProjectModule.class);
+                ProjectModule projectModule =
+                    findAnnotation(testClass, ProjectModule.class).orElse(null);
                 if (projectModule != null) {
                   projectModules = new ProjectModule[] {projectModule};
                 }
@@ -138,13 +141,14 @@ public class JavaCodeInsightTestFixtureProvider
         .getTestClass()
         .map(
             (testClass) -> {
-              ModuleJdks moduleJdksAnnotation = testClass.getAnnotation(ModuleJdks.class);
+              ModuleJdks moduleJdksAnnotation =
+                  findAnnotation(testClass, ModuleJdks.class).orElse(null);
               ModuleJdk[] moduleJdks =
                   (moduleJdksAnnotation == null)
                       ? EMPTY_MODULE_JDK_ARRAY
                       : moduleJdksAnnotation.value();
               if (moduleJdks.length == 0) {
-                ModuleJdk moduleJdk = testClass.getAnnotation(ModuleJdk.class);
+                ModuleJdk moduleJdk = findAnnotation(testClass, ModuleJdk.class).orElse(null);
                 if (moduleJdk != null) {
                   moduleJdks = new ModuleJdk[] {moduleJdk};
                 }

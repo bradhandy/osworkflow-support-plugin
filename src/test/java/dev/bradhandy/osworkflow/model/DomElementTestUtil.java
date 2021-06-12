@@ -4,9 +4,14 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
+import com.intellij.util.xml.DomElement;
+import com.intellij.util.xml.DomElementVisitor;
 import com.intellij.util.xml.DomFileElement;
 import com.intellij.util.xml.DomManager;
+import com.intellij.util.xml.DomUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 import static dev.bradhandy.testing.PluginUtil.runReadAction;
@@ -69,6 +74,38 @@ public final class DomElementTestUtil {
             () -> {
               Workflow workflow = readWorkflowElement(workflowPsiFile, codeInsightTestFixture);
               return workflow.getRegisterList();
+            });
+  }
+
+  public static List<WorkflowValue<?>> findArgumentsForType(
+      PsiFile workflowPsiFile,
+      CodeInsightTestFixture codeInsightTestFixture,
+      Predicate<WorkflowValue<?>> worklowPredicate,
+      Class<? extends ArgumentContainer> parent) {
+    return runReadAction(
+        (Computable<? extends List<WorkflowValue<?>>>)
+            () -> {
+              Workflow workflow = readWorkflowElement(workflowPsiFile, codeInsightTestFixture);
+              List<WorkflowValue<?>> workflowValues = new ArrayList<>();
+              workflow.acceptChildren(
+                  new DomElementVisitor() {
+                    @Override
+                    public void visitDomElement(DomElement element) {
+                      if (element instanceof WorkflowValue) {
+
+                        // we want to skip the 'acceptChildren' call for this element since
+                        // WorkflowValues do not have children.
+                        if (worklowPredicate.test((WorkflowValue<?>) element)
+                            && DomUtil.getParentOfType(element, parent, true) != null) {
+                          workflowValues.add((WorkflowValue<?>) element);
+                        }
+                      } else {
+                        element.acceptChildren(this);
+                      }
+                    }
+                  });
+
+              return workflowValues;
             });
   }
 }

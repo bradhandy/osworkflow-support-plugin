@@ -4,12 +4,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
 import com.intellij.util.xml.DomFileElement;
-import dev.bradhandy.testing.JavaCodeInsightTestFixtureProvider;
-import dev.bradhandy.testing.PluginTestDataPath;
+import dev.bradhandy.osworkflow.JavaProjectTest;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readRegisterList;
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowFileElement;
@@ -17,9 +15,8 @@ import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowProp
 import static dev.bradhandy.testing.PluginUtil.runReadAction;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(JavaCodeInsightTestFixtureProvider.class)
-@PluginTestDataPath("build/resources/test")
-public class OsWorkflowModelTest {
+@JavaProjectTest
+class OsWorkflowModelTest {
 
   @Test
   void givenOsWorkflowFile_whenOpened_thenWorkflowElementParsed(

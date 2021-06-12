@@ -15,8 +15,21 @@
   <depends>com.intellij.modules.xml</depends>
   <depends>com.intellij.modules.java</depends>
 
+  <extensionPoints>
+    <extensionPoint name="workflowValueConverter"
+        interface="dev.bradhandy.osworkflow.model.converter.WorkflowValueConverterProvider" />
+  </extensionPoints>
+
   <extensions defaultExtensionNs="com.intellij">
+    <applicationService
+        serviceImplementation="dev.bradhandy.osworkflow.model.converter.WorkflowValueConvertersRegistry" />
+
     <dom.fileMetaData implementation="dev.bradhandy.osworkflow.model.WorkflowFileDescription"
         rootTagName="workflow" />
+  </extensions>
+
+  <extensions defaultExtensionNs="dev.bradhandy.workflow">
+    <workflowValueConverter
+        implementation="dev.bradhandy.osworkflow.model.converter.PsiClassWorkflowValueConverterProvider" />
   </extensions>
 </idea-plugin>

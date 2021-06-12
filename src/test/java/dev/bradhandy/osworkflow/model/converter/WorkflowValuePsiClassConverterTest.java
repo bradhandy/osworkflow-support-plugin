@@ -8,6 +8,8 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
 import com.intellij.util.xml.impl.ConvertContextFactory;
+import dev.bradhandy.osworkflow.JavaProjectTest;
+import dev.bradhandy.osworkflow.OsWorkflowJavaModuleRequired;
 import dev.bradhandy.osworkflow.model.WorkflowValue;
 import dev.bradhandy.testing.JavaCodeInsightTestFixtureProvider;
 import dev.bradhandy.testing.ModuleJdk;
@@ -20,11 +22,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowProperty;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(JavaCodeInsightTestFixtureProvider.class)
-@PluginTestDataPath("build/resources/test")
-@ProjectModule(
-    builderType = JavaModuleFixtureBuilder.class,
-    builderImpl = "dev.bradhandy.testing.OsWorkflowJavaModuleFixtureBuilder")
+@JavaProjectTest
+@OsWorkflowJavaModuleRequired
 @ModuleJdk(languageLevel = LanguageLevel.JDK_14)
 class WorkflowValuePsiClassConverterTest {
 
