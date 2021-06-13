@@ -13,6 +13,7 @@ import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
+import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -34,6 +35,7 @@ public class JavaCodeInsightTestFixtureProvider
   private static final ModuleJdk[] EMPTY_MODULE_JDK_ARRAY = new ModuleJdk[0];
 
   private static CodeInsightTestFixture codeInsightTestFixture;
+  private static TempDirTestFixtureImpl tempDirTestFixture;
 
   @Override
   public boolean supportsParameter(
@@ -55,7 +57,7 @@ public class JavaCodeInsightTestFixtureProvider
   }
 
   @Override
-  public void afterAll(ExtensionContext context) throws Exception {
+  public void afterAll(ExtensionContext context) {
     try {
       if (codeInsightTestFixture != null) {
         codeInsightTestFixture.tearDown();
@@ -65,6 +67,7 @@ public class JavaCodeInsightTestFixtureProvider
     }
     TestApplicationManager.getInstance().setDataProvider(null);
     codeInsightTestFixture = null;
+    tempDirTestFixture = null;
   }
 
   @Override
@@ -73,6 +76,8 @@ public class JavaCodeInsightTestFixtureProvider
         extensionContext
             .getTestClass()
             .flatMap(testClass -> findAnnotation(testClass, PluginTestDataPath.class));
+
+    tempDirTestFixture = new TempDirTestFixtureImpl();
 
     String testDataPath =
         pluginTestDataPathAnnotation.map(PluginTestDataPath::value).orElse(DEFAULT_TEST_DATA_PATH);
@@ -96,7 +101,8 @@ public class JavaCodeInsightTestFixtureProvider
   private CodeInsightTestFixture createCodeInsightTextFixture(
       String testDataPath, IdeaProjectTestFixture projectTestFixture) {
     codeInsightTestFixture =
-        JavaTestFixtureFactory.getFixtureFactory().createCodeInsightFixture(projectTestFixture);
+        JavaTestFixtureFactory.getFixtureFactory()
+            .createCodeInsightFixture(projectTestFixture, tempDirTestFixture);
 
     codeInsightTestFixture.setTestDataPath(testDataPath);
 
@@ -194,6 +200,8 @@ public class JavaCodeInsightTestFixtureProvider
         ((JavaModuleFixtureBuilder<?>) moduleFixtureBuilder)
             .addJdk(jdkPath)
             .setLanguageLevel(languageLevel);
+        moduleFixtureBuilder.addContentRoot(tempDirTestFixture.getTempDirPath());
+        moduleFixtureBuilder.addSourceRoot("src");
       }
     }
 

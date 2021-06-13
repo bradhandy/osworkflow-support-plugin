@@ -20,7 +20,7 @@ import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowProp
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JavaProjectTest
-class PsiClassWorkflowValueConverterProviderTest {
+class WorkflowPropertyWorkflowValuePsiConverterProviderTest {
 
   private PsiClassWorkflowValueConverterProvider psiClassWorkflowValueConverterProvider;
 
