@@ -8,6 +8,7 @@
   <registers>
     <register id="my-id" type="some-valid-type" variable-name="someVariableName">
       <arg name="class.name">dev.bradhandy.NoopRegister</arg>
+      <arg name="someOtherArgument">true</arg>
     </register>
     <register id="my-other-id" type="some-invalid-type" variable-name="someOtherVariableName">
       <arg name="class.name">java.lang.Object</arg>

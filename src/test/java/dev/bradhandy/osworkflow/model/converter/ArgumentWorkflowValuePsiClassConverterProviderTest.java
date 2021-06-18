@@ -14,13 +14,16 @@ import dev.bradhandy.osworkflow.OsWorkflowJavaModuleRequired;
 import dev.bradhandy.osworkflow.model.Register;
 import dev.bradhandy.osworkflow.model.WorkflowValue;
 import dev.bradhandy.testing.ModuleJdk;
+import dev.bradhandy.testing.PluginUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.findArgumentsForType;
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowProperty;
+import static dev.bradhandy.testing.PluginUtil.runReadAction;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JavaProjectTest
@@ -72,6 +75,33 @@ public class ArgumentWorkflowValuePsiClassConverterProviderTest {
     Condition<Pair<PsiType, GenericDomValue>> providerCondition = converterProvider.getCondition();
     Pair<PsiType, GenericDomValue> metaTagWorkflowValuePair = Pair.pair(null, metaTagWorkflowValue);
     assertThat(providerCondition.value(metaTagWorkflowValuePair)).isFalse();
+  }
+
+  @Test
+  void givenWorkflowValueElement_whenConvertingUnsupportRegisterArgument_thenConditionFails(
+      JavaCodeInsightTestFixture codeInsightTestFixture) {
+    PsiFile workflowPsiFile = codeInsightTestFixture.configureByFile("parsing/before/workflow.xml");
+    assertThat(workflowPsiFile).isInstanceOf(XmlFile.class);
+
+    List<WorkflowValue<?>> unsupportedRegisterArguments =
+        findArgumentsForType(
+            workflowPsiFile,
+            codeInsightTestFixture,
+            Predicate.not(WorkflowValue.withName("class.name")),
+            Register.class);
+
+    assertThat(converterProvider.getCondition()).isNotNull();
+
+    runReadAction(
+        () -> {
+          for (WorkflowValue<?> unsupportedRegisterArgument : unsupportedRegisterArguments) {
+            Condition<Pair<PsiType, GenericDomValue>> providerCondition =
+                converterProvider.getCondition();
+            Pair<PsiType, GenericDomValue> metaTagWorkflowValuePair =
+                Pair.pair(null, unsupportedRegisterArgument);
+            assertThat(providerCondition.value(metaTagWorkflowValuePair)).isFalse();
+          }
+        });
   }
 
   @Test
