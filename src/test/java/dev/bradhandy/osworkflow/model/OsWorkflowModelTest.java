@@ -65,7 +65,7 @@ class OsWorkflowModelTest {
 
           Register register =
               registerList.getRegisters().stream()
-                  .filter(Register.withType("some-type"))
+                  .filter(Register.withType("some-valid-type"))
                   .findFirst()
                   .orElse(null);
           assertThat(register).isNotNull();

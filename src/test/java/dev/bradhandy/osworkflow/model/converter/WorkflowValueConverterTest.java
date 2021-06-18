@@ -1,12 +1,6 @@
 package dev.bradhandy.osworkflow.model.converter;
 
-import com.intellij.mock.MockApplication;
-import com.intellij.mock.MockComponentManager;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceDescriptor;
-import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.psi.PsiFile;
 import com.intellij.testFramework.ExtensionTestUtil;
@@ -50,8 +44,8 @@ class WorkflowValueConverterTest {
   @Test
   void givenCustomConverter_whenLookingUpConverter_thenConverterFound(
       JavaCodeInsightTestFixture codeInsightTestFixture) {
-    PsiClassWorkflowValueConverterProvider workflowValueConverterProvider =
-        new PsiClassWorkflowValueConverterProvider();
+    WorkflowPropertyWorkflowValuePsiClassConverterProvider workflowValueConverterProvider =
+        new WorkflowPropertyWorkflowValuePsiClassConverterProvider();
 
     ExtensionTestUtil.addExtensions(
         WorkflowValueConverterProvider.EP,

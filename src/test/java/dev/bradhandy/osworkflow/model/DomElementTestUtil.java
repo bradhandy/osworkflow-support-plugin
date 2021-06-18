@@ -12,6 +12,7 @@ import com.intellij.util.xml.DomUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import static dev.bradhandy.testing.PluginUtil.runReadAction;
@@ -77,11 +78,21 @@ public final class DomElementTestUtil {
             });
   }
 
-  public static List<WorkflowValue<?>> findArgumentsForType(
+  public static <P extends ArgumentContainer> List<WorkflowValue<?>> findArgumentsForType(
       PsiFile workflowPsiFile,
       CodeInsightTestFixture codeInsightTestFixture,
       Predicate<WorkflowValue<?>> worklowPredicate,
-      Class<? extends ArgumentContainer> parent) {
+      Class<P> parent) {
+    return findArgumentsForType(
+        workflowPsiFile, codeInsightTestFixture, worklowPredicate, parent, Objects::nonNull);
+  }
+
+  public static <P extends ArgumentContainer> List<WorkflowValue<?>> findArgumentsForType(
+      PsiFile workflowPsiFile,
+      CodeInsightTestFixture codeInsightTestFixture,
+      Predicate<WorkflowValue<?>> worklowPredicate,
+      Class<P> parent,
+      Predicate<P> parentPredicate) {
     return runReadAction(
         (Computable<? extends List<WorkflowValue<?>>>)
             () -> {
@@ -94,9 +105,12 @@ public final class DomElementTestUtil {
                       if (element instanceof WorkflowValue) {
 
                         // we want to skip the 'acceptChildren' call for this element since
-                        // WorkflowValues do not have children.
+                        // WorkflowValues do not have children. so we check these conditions with
+                        // a nested "if" statement instead of rolling the condition up into the
+                        // parent.
                         if (worklowPredicate.test((WorkflowValue<?>) element)
-                            && DomUtil.getParentOfType(element, parent, true) != null) {
+                            && parentPredicate.test(
+                                DomUtil.getParentOfType(element, parent, true))) {
                           workflowValues.add((WorkflowValue<?>) element);
                         }
                       } else {

@@ -8,10 +8,11 @@ import com.intellij.util.xml.Converter;
 import com.intellij.util.xml.GenericDomValue;
 import dev.bradhandy.osworkflow.model.WorkflowValue;
 
-public class PsiClassWorkflowValueConverterProvider implements WorkflowValueConverterProvider {
+public class WorkflowPropertyWorkflowValuePsiClassConverterProvider
+    implements WorkflowValueConverterProvider {
 
   @Override
-  public Converter getConverter() {
+  public Converter<?> getConverter() {
     return WorkflowValuePsiClassConverter.INSTANCE;
   }
 

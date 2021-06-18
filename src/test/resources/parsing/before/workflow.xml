@@ -6,14 +6,16 @@
   <meta name="someClassNameMetaProperty">java.lang.Object</meta>
 
   <registers>
-    <register id="my-id" type="some-type" variable-name="someVariableName">
+    <register id="my-id" type="some-valid-type" variable-name="someVariableName">
       <arg name="class.name">dev.bradhandy.NoopRegister</arg>
+    </register>
+    <register id="my-other-id" type="some-invalid-type" variable-name="someOtherVariableName">
+      <arg name="class.name">java.lang.Object</arg>
     </register>
 
     <!--
       registers that aren't checked directly. they're only here for the collection size check.
       -->
-    <register id="my-other-id" type="some-other-type" variable-name="someOtherVariableName" />
     <register id="my-yet-another-id" type="some-new-type" variable-name="someNewVariableName" />
   </registers>
 </workflow>

@@ -5,6 +5,7 @@ import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.NameValue;
+import com.intellij.util.xml.Referencing;
 import dev.bradhandy.osworkflow.model.converter.WorkflowValueConverter;
 
 import java.util.function.Predicate;

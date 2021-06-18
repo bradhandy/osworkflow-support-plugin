@@ -1,5 +1,6 @@
 package dev.bradhandy.osworkflow.model.converter;
 
+import com.google.common.collect.Iterables;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiFile;
@@ -20,13 +21,13 @@ import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowProp
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JavaProjectTest
-class WorkflowPropertyWorkflowValuePsiConverterProviderTest {
+class WorkflowPropertyWorkflowValuePsiClassConverterProviderTest {
 
-  private PsiClassWorkflowValueConverterProvider psiClassWorkflowValueConverterProvider;
+  private WorkflowPropertyWorkflowValuePsiClassConverterProvider converterProvider;
 
   @BeforeEach
   void setUpWorkflowValuePsiClassConverterProvider() {
-    psiClassWorkflowValueConverterProvider = new PsiClassWorkflowValueConverterProvider();
+    converterProvider = new WorkflowPropertyWorkflowValuePsiClassConverterProvider();
   }
 
   @Test
@@ -39,10 +40,9 @@ class WorkflowPropertyWorkflowValuePsiConverterProviderTest {
         readWorkflowProperty(
             workflowPsiFile, codeInsightTestFixture, WorkflowValue.withName("someMetaProperty"));
 
-    assertThat(psiClassWorkflowValueConverterProvider.getCondition()).isNotNull();
+    assertThat(converterProvider.getCondition()).isNotNull();
 
-    Condition<Pair<PsiType, GenericDomValue>> providerCondition =
-        psiClassWorkflowValueConverterProvider.getCondition();
+    Condition<Pair<PsiType, GenericDomValue>> providerCondition = converterProvider.getCondition();
     Pair<PsiType, GenericDomValue> metaTagWorkflowValuePair = Pair.pair(null, metaTagWorkflowValue);
     assertThat(providerCondition.value(metaTagWorkflowValuePair)).isTrue();
   }
@@ -58,21 +58,21 @@ class WorkflowPropertyWorkflowValuePsiConverterProviderTest {
             workflowPsiFile,
             codeInsightTestFixture,
             WorkflowValue.withName("class.name"),
-            Register.class);
+            Register.class,
+            Register.withType("some-valid-type"));
+    WorkflowValue<?> registerArgument = Iterables.getOnlyElement(registerClassArguments);
 
-    assertThat(registerClassArguments).hasSize(1);
+    assertThat(converterProvider.getCondition()).isNotNull();
 
-    Condition<Pair<PsiType, GenericDomValue>> providerCondition =
-        psiClassWorkflowValueConverterProvider.getCondition();
-    Pair<PsiType, GenericDomValue> metaTagWorkflowValuePair =
-        Pair.pair(null, registerClassArguments.get(0));
-    assertThat(providerCondition.value(metaTagWorkflowValuePair)).isFalse();
+    Condition<Pair<PsiType, GenericDomValue>> providerCondition = converterProvider.getCondition();
+    Pair<PsiType, GenericDomValue> registerArgumentPair = Pair.pair(null, registerArgument);
+    assertThat(providerCondition.value(registerArgumentPair)).isFalse();
   }
 
   @Test
   void givenWorkflowValuePsiConverterProvider_whenRetrievingConverter_thenShouldBeStaticInstance() {
-    assertThat(psiClassWorkflowValueConverterProvider.getConverter())
-        .isSameAs(WorkflowValuePsiClassConverter.INSTANCE)
-        .isInstanceOf(WorkflowValuePsiClassConverter.class);
+    assertThat(converterProvider.getConverter())
+        .isInstanceOf(WorkflowValuePsiClassConverter.class)
+        .isSameAs(WorkflowValuePsiClassConverter.INSTANCE);
   }
 }

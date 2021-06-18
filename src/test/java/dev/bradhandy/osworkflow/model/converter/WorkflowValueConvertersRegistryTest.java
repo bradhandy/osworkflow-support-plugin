@@ -51,8 +51,8 @@ class WorkflowValueConvertersRegistryTest {
   @Test
   void givenOneValueConverterProvider_whenConverting_thenExtensionIsFound(
       JavaCodeInsightTestFixture codeInsightTestFixture) {
-    PsiClassWorkflowValueConverterProvider workflowValueConverterProvider =
-        new PsiClassWorkflowValueConverterProvider();
+    WorkflowPropertyWorkflowValuePsiClassConverterProvider workflowValueConverterProvider =
+        new WorkflowPropertyWorkflowValuePsiClassConverterProvider();
 
     ExtensionTestUtil.maskExtensions(
         WorkflowValueConverterProvider.EP,
@@ -77,8 +77,8 @@ class WorkflowValueConvertersRegistryTest {
   void givenMultipleValueConverterProviders_whenConverting_thenExtensionIsFound(
       JavaCodeInsightTestFixture codeInsightTestFixture,
       @Mock WorkflowValueConverterProvider mockWorkflowValueConverterProvider) {
-    PsiClassWorkflowValueConverterProvider workflowValueConverterProvider =
-        new PsiClassWorkflowValueConverterProvider();
+    WorkflowPropertyWorkflowValuePsiClassConverterProvider workflowValueConverterProvider =
+        new WorkflowPropertyWorkflowValuePsiClassConverterProvider();
 
     ExtensionTestUtil.maskExtensions(
         WorkflowValueConverterProvider.EP,

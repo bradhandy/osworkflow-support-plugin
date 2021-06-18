@@ -30,6 +30,8 @@
 
   <extensions defaultExtensionNs="dev.bradhandy.workflow">
     <workflowValueConverter
-        implementation="dev.bradhandy.osworkflow.model.converter.PsiClassWorkflowValueConverterProvider" />
+        implementation="dev.bradhandy.osworkflow.model.converter.WorkflowPropertyWorkflowValuePsiClassConverterProvider" />
+    <workflowValueConverter
+        implementation="dev.bradhandy.osworkflow.model.converter.ArgumentWorkflowValuePsiClassConverterProvider" />
   </extensions>
 </idea-plugin>
