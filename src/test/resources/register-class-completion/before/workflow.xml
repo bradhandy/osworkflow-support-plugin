@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow PUBLIC "-//OpenSymphony Group//DTD OSWorkflow 2.6//EN" "http://www.opensymphony.com/osworkflow/workflow_2_8.dtd">
+<workflow>
+  <meta name="someMetaProperty">someMetaValue</meta>
+  <meta name="someOtherMetaProperty">someOtherMetaValue</meta>
+  <meta name="someClassNameMetaProperty">java.lang.Object</meta>
+
+  <registers>
+    <register id="my-id" type="some-valid-type" variable-name="someVariableName">
+      <arg name="class.name"><caret></arg>
+    </register>
+  </registers>
+</workflow>
