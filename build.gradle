@@ -15,17 +15,20 @@ dependencies {
   testImplementation 'org.assertj:assertj-core:3.19.0'
   testImplementation 'org.mockito:mockito-core:3.11.0'
   testImplementation 'org.mockito:mockito-junit-jupiter:3.11.0'
+  testImplementation 'opensymphony:osworkflow:2.7.0'
 
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+  testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.7.2'
 }
 
 test {
   useJUnitPlatform()
+  systemProperty "idea.home.path", "/Users/bhandy/projects/github/intellij-community"
 }
 
 intellij {
   type 'IU'
-  version 'IU-LATEST-EAP-SNAPSHOT'
+  version '2021.1'
   pluginName 'OS Workflow Support'
   plugins = [
       'java',
@@ -33,6 +36,7 @@ intellij {
       'java-i18n',  // required for the Spring dependency
       'properties'  // required by java-i18n
   ]
+  downloadSources true
   patchPluginXml {
     sinceBuild '2021.1'
     version project.version

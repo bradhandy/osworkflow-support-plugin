@@ -73,8 +73,9 @@ class OsWorkflowModelTest {
           assertThat(register.getId().getStringValue()).isEqualTo("my-id");
 
           assertThat(register.getArguments())
-              .hasSize(1)
-              .have(
+              .hasSize(2)
+              .haveAtMost(
+                  1,
                   new Condition<>(
                       WorkflowValue.withNameAndValue("class.name", "dev.bradhandy.NoopRegister"),
                       "'class.name' argument"));

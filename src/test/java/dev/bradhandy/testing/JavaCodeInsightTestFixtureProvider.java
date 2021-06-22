@@ -4,13 +4,14 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.TestApplicationManager;
+import com.intellij.testFramework.TestIndexingModeSupporter;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.builders.ModuleFixtureBuilder;
-import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
+import com.intellij.testFramework.fixtures.JavaIndexingModeCodeInsightTestFixture;
 import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
@@ -21,6 +22,9 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +38,7 @@ public class JavaCodeInsightTestFixtureProvider
   private static final ProjectModule[] EMPTY_PROJECT_MODULE_ARRAY = new ProjectModule[0];
   private static final ModuleJdk[] EMPTY_MODULE_JDK_ARRAY = new ModuleJdk[0];
 
-  private static CodeInsightTestFixture codeInsightTestFixture;
+  private static JavaCodeInsightTestFixture codeInsightTestFixture;
   private static TempDirTestFixtureImpl tempDirTestFixture;
 
   @Override
@@ -88,7 +92,7 @@ public class JavaCodeInsightTestFixtureProvider
     }
   }
 
-  private CodeInsightTestFixture createLightCodeInsightTestFixture(String testDataPath)
+  private JavaCodeInsightTestFixture createLightCodeInsightTestFixture(String testDataPath)
       throws ParameterResolutionException {
     IdeaProjectTestFixture projectTestFixture =
         IdeaTestFixtureFactory.getFixtureFactory()
@@ -98,11 +102,14 @@ public class JavaCodeInsightTestFixtureProvider
     return createCodeInsightTextFixture(testDataPath, projectTestFixture);
   }
 
-  private CodeInsightTestFixture createCodeInsightTextFixture(
+  private JavaCodeInsightTestFixture createCodeInsightTextFixture(
       String testDataPath, IdeaProjectTestFixture projectTestFixture) {
     codeInsightTestFixture =
         JavaTestFixtureFactory.getFixtureFactory()
             .createCodeInsightFixture(projectTestFixture, tempDirTestFixture);
+    codeInsightTestFixture =
+        JavaIndexingModeCodeInsightTestFixture.Companion.wrapFixture(
+            codeInsightTestFixture, TestIndexingModeSupporter.IndexingMode.SMART);
 
     codeInsightTestFixture.setTestDataPath(testDataPath);
 
@@ -165,7 +172,7 @@ public class JavaCodeInsightTestFixtureProvider
         .orElse(EMPTY_MODULE_JDK_ARRAY);
   }
 
-  private CodeInsightTestFixture createHeavyCodeInsightTestFixture(
+  private JavaCodeInsightTestFixture createHeavyCodeInsightTestFixture(
       String testDataPath, ExtensionContext extensionContext) {
     ModuleJdk[] moduleJdks = getModuleJdks(extensionContext);
     Map<String, ModuleJdk> moduleJdkMap = Maps.uniqueIndex(List.of(moduleJdks), ModuleJdk::name);
@@ -200,8 +207,26 @@ public class JavaCodeInsightTestFixtureProvider
         ((JavaModuleFixtureBuilder<?>) moduleFixtureBuilder)
             .addJdk(jdkPath)
             .setLanguageLevel(languageLevel);
-        moduleFixtureBuilder.addContentRoot(tempDirTestFixture.getTempDirPath());
+        ((JavaModuleFixtureBuilder<?>) moduleFixtureBuilder)
+            .addMavenLibrary(new JavaModuleFixtureBuilder.MavenLib("opensymphony:osworkflow:2.7.0"));
+
+        Path tempDirectory = Path.of(tempDirTestFixture.getTempDirPath());
+        Path contentPath = tempDirectory.resolve("content");
+        Path srcPath = contentPath.resolve("src");
+        Path outputPath = tempDirectory.resolve("output/production");
+        Path testOutputPath = tempDirectory.resolve("output/test");
+
+        try {
+          Files.createDirectories(contentPath);
+          Files.createDirectories(srcPath);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+
+        moduleFixtureBuilder.addContentRoot(contentPath.toAbsolutePath().toString());
         moduleFixtureBuilder.addSourceRoot("src");
+        moduleFixtureBuilder.setOutputPath(outputPath.toAbsolutePath().toString());
+        moduleFixtureBuilder.setTestOutputPath(testOutputPath.toAbsolutePath().toString());
       }
     }
 

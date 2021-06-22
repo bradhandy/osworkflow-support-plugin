@@ -64,9 +64,10 @@ class WorkflowValuePsiClassConverterTest {
   @Test
   void givenOsWorkflowFile_whenRegisterClassNameIsValidRegisterType_thenConvertToPsiClass(
       JavaCodeInsightTestFixture codeInsightTestFixture) {
-    codeInsightTestFixture.copyDirectoryToProject("parsing/before", "");
+    codeInsightTestFixture.copyDirectoryToProject("parsing/before", "content");
 
-    PsiFile workflowPsiFile = codeInsightTestFixture.configureFromTempProjectFile("workflow.xml");
+    PsiFile workflowPsiFile =
+        codeInsightTestFixture.configureFromTempProjectFile("content/workflow.xml");
     assertThat(workflowPsiFile).isInstanceOf(XmlFile.class);
 
     List<WorkflowValue<?>> registerArguments =
@@ -78,17 +79,13 @@ class WorkflowValuePsiClassConverterTest {
             Register.withType("some-valid-type"));
     WorkflowValue<?> registerArgument = Iterables.getOnlyElement(registerArguments);
 
-    ApplicationManager.getApplication()
-        .runReadAction(
-            () -> {
-              TypedValue<PsiClass> typedWorkflowValue =
-                  workflowValuePsiClassConverter.fromString(
-                      registerArgument.getStringValue(),
-                      ConvertContextFactory.createConvertContext(registerArgument));
-              assertThat(typedWorkflowValue).isNotNull();
-              assertThat(typedWorkflowValue.getConvertedValue()).isNotNull();
-              assertThat(typedWorkflowValue.getConvertedValue().getQualifiedName())
-                  .isEqualTo("dev.bradhandy.NoopRegister");
-            });
+    TypedValue<PsiClass> typedWorkflowValue =
+        workflowValuePsiClassConverter.fromString(
+            registerArgument.getStringValue(),
+            ConvertContextFactory.createConvertContext(registerArgument));
+    assertThat(typedWorkflowValue).isNotNull();
+    assertThat(typedWorkflowValue.getConvertedValue()).isNotNull();
+    assertThat(typedWorkflowValue.getConvertedValue().getQualifiedName())
+        .isEqualTo("dev.bradhandy.NoopRegister");
   }
 }

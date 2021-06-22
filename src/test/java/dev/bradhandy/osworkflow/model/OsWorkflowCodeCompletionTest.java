@@ -1,7 +1,6 @@
 package dev.bradhandy.osworkflow.model;
 
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
 import dev.bradhandy.osworkflow.JavaProjectTest;
@@ -21,15 +20,18 @@ public class OsWorkflowCodeCompletionTest {
   @Test
   void givenOsWorkflowFile_whenCaretInRegisterArgumentElement_thenSuggestRegistersForCompletion(
       JavaCodeInsightTestFixture codeInsightTestFixture) {
-    codeInsightTestFixture.copyDirectoryToProject("register-class-completion/before", "");
-    codeInsightTestFixture.configureFromTempProjectFile("workflow.xml");
+    codeInsightTestFixture.copyDirectoryToProject("register-class-completion/before", "content");
+    codeInsightTestFixture.configureFromTempProjectFile("content/workflow.xml");
 
-    LookupElement[] lookupElements = codeInsightTestFixture.complete(CompletionType.BASIC);
+    codeInsightTestFixture.complete(CompletionType.SMART);
 
     List<String> completionSuggestions = codeInsightTestFixture.getLookupElementStrings();
     assertThat(completionSuggestions).isNotNull().isNotEmpty();
-    assertThat(completionSuggestions).contains("NoopRegister").doesNotContain("SomeOtherClass");
+    assertThat(completionSuggestions)
+        .contains("dev.bradhandy.NoopRegister")
+        .doesNotContain("dev.bradhandy.SomeOtherClass");
 
-    codeInsightTestFixture.assertPreferredCompletionItems(0, "NoopRegister");
+    codeInsightTestFixture.type('\t');
+    codeInsightTestFixture.checkResultByFile("register-class-completion/after/workflow.xml");
   }
 }
