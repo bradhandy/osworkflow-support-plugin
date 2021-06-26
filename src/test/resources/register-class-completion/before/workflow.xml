@@ -7,7 +7,7 @@
 
   <registers>
     <register id="my-id" type="some-valid-type" variable-name="someVariableName">
-      <arg name="class.name"><caret></arg>
+      <arg name="class.name"><![CDATA[<caret>]]></arg>
     </register>
   </registers>
 </workflow>

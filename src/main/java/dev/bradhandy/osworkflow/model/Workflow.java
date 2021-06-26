@@ -15,4 +15,7 @@ public interface Workflow extends DomElement {
 
   @SubTag("registers")
   RegisterList getRegisterList();
+
+  @SubTag("trigger-functions")
+  TriggerFunctionList getTriggerFunctionList();
 }

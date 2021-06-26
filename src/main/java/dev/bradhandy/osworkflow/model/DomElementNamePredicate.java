@@ -15,6 +15,10 @@ class DomElementNamePredicate<T extends DomElement> implements Predicate<T> {
 
   @Override
   public boolean test(T element) {
+    if (element == null) {
+      return false;
+    }
+
     DomGenericInfo domGenericInfo = element.getGenericInfo();
     return name.equals(domGenericInfo.getElementName(element));
   }

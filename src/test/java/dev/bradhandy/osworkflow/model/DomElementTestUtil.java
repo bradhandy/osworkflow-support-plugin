@@ -4,6 +4,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.testFramework.fixtures.CodeInsightTestFixture;
+import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomElementVisitor;
 import com.intellij.util.xml.DomFileElement;
@@ -120,6 +121,16 @@ public final class DomElementTestUtil {
                   });
 
               return workflowValues;
+            });
+  }
+
+  public static TriggerFunctionList readTriggerFunctionList(
+      PsiFile workflowPsiFile, JavaCodeInsightTestFixture codeInsightTestFixture) {
+    return runReadAction(
+        (Computable<? extends TriggerFunctionList>)
+            () -> {
+              Workflow workflow = readWorkflowElement(workflowPsiFile, codeInsightTestFixture);
+              return workflow.getTriggerFunctionList();
             });
   }
 }

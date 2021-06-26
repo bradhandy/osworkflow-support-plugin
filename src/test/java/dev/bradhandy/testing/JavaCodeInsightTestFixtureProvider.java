@@ -15,8 +15,8 @@ import com.intellij.testFramework.fixtures.JavaIndexingModeCodeInsightTestFixtur
 import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.testFramework.fixtures.impl.TempDirTestFixtureImpl;
-import org.junit.jupiter.api.extension.AfterAllCallback;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
@@ -32,7 +32,7 @@ import java.util.Optional;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 public class JavaCodeInsightTestFixtureProvider
-    implements ParameterResolver, BeforeAllCallback, AfterAllCallback {
+    implements ParameterResolver, BeforeEachCallback, AfterEachCallback {
 
   private static final String DEFAULT_TEST_DATA_PATH = "build";
   private static final ProjectModule[] EMPTY_PROJECT_MODULE_ARRAY = new ProjectModule[0];
@@ -61,7 +61,7 @@ public class JavaCodeInsightTestFixtureProvider
   }
 
   @Override
-  public void afterAll(ExtensionContext context) {
+  public void afterEach(ExtensionContext context) {
     try {
       if (codeInsightTestFixture != null) {
         codeInsightTestFixture.tearDown();
@@ -75,7 +75,7 @@ public class JavaCodeInsightTestFixtureProvider
   }
 
   @Override
-  public void beforeAll(ExtensionContext extensionContext) {
+  public void beforeEach(ExtensionContext extensionContext) {
     Optional<PluginTestDataPath> pluginTestDataPathAnnotation =
         extensionContext
             .getTestClass()
@@ -208,7 +208,8 @@ public class JavaCodeInsightTestFixtureProvider
             .addJdk(jdkPath)
             .setLanguageLevel(languageLevel);
         ((JavaModuleFixtureBuilder<?>) moduleFixtureBuilder)
-            .addMavenLibrary(new JavaModuleFixtureBuilder.MavenLib("opensymphony:osworkflow:2.7.0"));
+            .addMavenLibrary(new JavaModuleFixtureBuilder.MavenLib("opensymphony:osworkflow:2.7.0"))
+            .addMavenLibrary(new JavaModuleFixtureBuilder.MavenLib("opensymphony:propertyset:1.3"));
 
         Path tempDirectory = Path.of(tempDirTestFixture.getTempDirPath());
         Path contentPath = tempDirectory.resolve("content");

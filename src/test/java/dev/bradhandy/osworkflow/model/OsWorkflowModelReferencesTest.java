@@ -1,7 +1,6 @@
 package dev.bradhandy.osworkflow.model;
 
 import com.google.common.collect.Iterables;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
@@ -39,18 +38,14 @@ class OsWorkflowModelReferencesTest {
         readWorkflowProperty(workflowPsiFile, codeInsightTestFixture, targetWorkflowProperty);
     assertThat(classNameProperty).isNotNull();
 
-    ApplicationManager.getApplication()
-        .runReadAction(
-            () -> {
-              assertThat(classNameProperty.getXmlElement()).isNotNull();
+    assertThat(classNameProperty.getXmlElement()).isNotNull();
 
-              GenericValueReferenceProvider referenceProvider = new GenericValueReferenceProvider();
-              PsiReference[] references =
-                  referenceProvider.getReferencesByElement(
-                      classNameProperty.getXmlElement(), new ProcessingContext());
+    GenericValueReferenceProvider referenceProvider = new GenericValueReferenceProvider();
+    PsiReference[] references =
+        referenceProvider.getReferencesByElement(
+            classNameProperty.getXmlElement(), new ProcessingContext());
 
-              assertThat(references).isNotEmpty();
-            });
+    assertThat(references).isNotEmpty();
   }
 
   @Test
@@ -71,14 +66,36 @@ class OsWorkflowModelReferencesTest {
     WorkflowValue<PsiClass> registerArgument =
         (WorkflowValue<PsiClass>) Iterables.getOnlyElement(registerArguments);
 
-    ApplicationManager.getApplication()
-        .runReadAction(
-            () -> {
-              GenericValueReferenceProvider referenceProvider = new GenericValueReferenceProvider();
-              PsiReference[] references =
-                  referenceProvider.getReferencesByElement(
-                      registerArgument.getXmlElement(), new ProcessingContext());
-              assertThat(references).isNotNull().isNotEmpty();
-            });
+    GenericValueReferenceProvider referenceProvider = new GenericValueReferenceProvider();
+    PsiReference[] references =
+        referenceProvider.getReferencesByElement(
+            registerArgument.getXmlElement(), new ProcessingContext());
+    assertThat(references).isNotNull().isNotEmpty();
+  }
+
+  @Test
+  void
+      givenOsWorkflowFile_whenTriggerFunctionClassNameIsValidFunctionType_thenReferencesAreAvailable(
+          JavaCodeInsightTestFixture codeInsightTestFixture) {
+    codeInsightTestFixture.copyDirectoryToProject("parsing/before", "");
+
+    PsiFile workflowPsiFile = codeInsightTestFixture.configureFromTempProjectFile("workflow.xml");
+    assertThat(workflowPsiFile).isInstanceOf(XmlFile.class);
+
+    List<WorkflowValue<?>> functionArguments =
+        findArgumentsForType(
+            workflowPsiFile,
+            codeInsightTestFixture,
+            WorkflowValue.withName("class.name"),
+            Function.class,
+            Function.withId("my-function-id"));
+    WorkflowValue<PsiClass> functionArgument =
+        (WorkflowValue<PsiClass>) Iterables.getOnlyElement(functionArguments);
+
+    GenericValueReferenceProvider referenceProvider = new GenericValueReferenceProvider();
+    PsiReference[] references =
+        referenceProvider.getReferencesByElement(
+            functionArgument.getXmlElement(), new ProcessingContext());
+    assertThat(references).isNotNull().isNotEmpty();
   }
 }

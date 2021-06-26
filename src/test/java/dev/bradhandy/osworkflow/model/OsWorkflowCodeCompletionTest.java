@@ -34,4 +34,22 @@ public class OsWorkflowCodeCompletionTest {
     codeInsightTestFixture.type('\t');
     codeInsightTestFixture.checkResultByFile("register-class-completion/after/workflow.xml");
   }
+
+  @Test
+  void givenOsWorkflowFile_whenCaretInFunctionArgumentElement_thenSuggestFunctionsForCompletion(
+      JavaCodeInsightTestFixture codeInsightTestFixture) {
+    codeInsightTestFixture.copyDirectoryToProject("function-class-completion/before", "content");
+    codeInsightTestFixture.configureFromTempProjectFile("content/workflow.xml");
+
+    codeInsightTestFixture.complete(CompletionType.SMART);
+
+    List<String> completionSuggestions = codeInsightTestFixture.getLookupElementStrings();
+    assertThat(completionSuggestions).isNotNull().isNotEmpty();
+    assertThat(completionSuggestions)
+        .contains("dev.bradhandy.NoopFunction")
+        .doesNotContain("dev.bradhandy.SomeOtherClass");
+
+    codeInsightTestFixture.type('\t');
+    codeInsightTestFixture.checkResultByFile("function-class-completion/after/workflow.xml");
+  }
 }

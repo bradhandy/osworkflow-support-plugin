@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class NoopRegister implements Register {
 
+  @Override
   public Object registerVariable(WorkflowContext var1, WorkflowEntry var2, Map var3)
       throws WorkflowException {
     return null;

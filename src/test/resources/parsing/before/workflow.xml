@@ -19,4 +19,16 @@
       -->
     <register id="my-yet-another-id" type="some-new-type" variable-name="someNewVariableName" />
   </registers>
+
+  <trigger-functions>
+    <trigger-function id="sample-trigger-function">
+      <function id="my-function-id" type="some-trigger-function-type" name="my-function-name">
+        <arg name="class.name">dev.bradhandy.NoopFunction</arg>
+        <arg name="someOtherArgument">someArgumentValue</arg>
+      </function>
+    </trigger-function>
+    <trigger-function id="another-trigger-function">
+      <function type="some-other-function" />
+    </trigger-function>
+  </trigger-functions>
 </workflow>

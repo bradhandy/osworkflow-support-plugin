@@ -5,9 +5,11 @@
   <meta name="someOtherMetaProperty">someOtherMetaValue</meta>
   <meta name="someClassNameMetaProperty">java.lang.Object</meta>
 
-  <registers>
-    <register id="my-id" type="some-valid-type" variable-name="someVariableName">
-      <arg name="class.name"><![CDATA[dev.bradhandy.NoopRegister<caret>]]></arg>
-    </register>
-  </registers>
+  <trigger-functions>
+    <trigger-function id="trigger-function-id">
+      <function id="my-id" type="some-valid-type" name="function-name">
+        <arg name="class.name"><![CDATA[dev.bradhandy.NoopFunction<caret>]]></arg>
+      </function>
+    </trigger-function>
+  </trigger-functions>
 </workflow>
