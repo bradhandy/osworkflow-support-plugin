@@ -1,25 +1,25 @@
 plugins {
-  id 'java'
-  id 'org.jetbrains.intellij' version '0.7.3'
+  id "java"
+  id "org.jetbrains.intellij" version "1.0"
 }
 
-group 'dev.bradhandy'
-version '1.0-SNAPSHOT'
+group "dev.bradhandy"
+version "1.0-SNAPSHOT"
 
 repositories {
   mavenCentral()
 }
 
 dependencies {
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
-  testImplementation 'org.assertj:assertj-core:3.19.0'
-  testImplementation 'org.mockito:mockito-core:3.11.0'
-  testImplementation 'org.mockito:mockito-junit-jupiter:3.11.0'
-  testImplementation 'opensymphony:osworkflow:2.7.0'
-  testImplementation 'opensymphony:propertyset:1.3'
+  testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.2"
+  testImplementation "org.assertj:assertj-core:3.19.0"
+  testImplementation "org.mockito:mockito-core:3.11.0"
+  testImplementation "org.mockito:mockito-junit-jupiter:3.11.0"
+  testImplementation "opensymphony:osworkflow:2.7.0"
+  testImplementation "opensymphony:propertyset:1.3"
 
-  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
-  testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.7.2'
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.2"
+  testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.7.2"
 }
 
 test {
@@ -28,21 +28,23 @@ test {
 }
 
 intellij {
-  type 'IU'
-  version '2021.1'
-  pluginName 'OS Workflow Support'
+  type = "IU"
+  version = "2021.1"
+  pluginName = "OS Workflow Support"
   plugins = [
-      'java',
-      'Spring',
-      'java-i18n',  // required for the Spring dependency
-      'properties'  // required by java-i18n
+      "java",
+      "Spring",
+      "java-i18n",  // required for the Spring dependency
+      "properties"  // required by java-i18n
   ]
-  downloadSources true
-  patchPluginXml {
-    sinceBuild '2021.1'
-    version project.version
-  }
-  buildPlugin {
-    baseName 'OSWorkflow'
-  }
+  downloadSources = true
+}
+
+buildPlugin {
+  archivesBaseName = "OSWorkflow"
+}
+
+patchPluginXml {
+  sinceBuild = "211.7442.40"
+  version = project.version
 }
