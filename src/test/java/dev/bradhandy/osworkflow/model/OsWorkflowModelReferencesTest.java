@@ -62,7 +62,7 @@ class OsWorkflowModelReferencesTest {
             codeInsightTestFixture,
             WorkflowValue.withName("class.name"),
             Register.class,
-            Register.withType("some-valid-type"));
+            Register.withId("my-register-id"));
     WorkflowValue<PsiClass> registerArgument =
         (WorkflowValue<PsiClass>) Iterables.getOnlyElement(registerArguments);
 

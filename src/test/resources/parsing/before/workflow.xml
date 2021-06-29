@@ -6,7 +6,7 @@
   <meta name="someClassNameMetaProperty">java.lang.Object</meta>
 
   <registers>
-    <register id="my-id" type="some-valid-type" variable-name="someVariableName">
+    <register id="my-register-id" type="some-register-type" variable-name="someVariableName">
       <arg name="class.name">dev.bradhandy.NoopRegister</arg>
       <arg name="someOtherArgument">true</arg>
     </register>

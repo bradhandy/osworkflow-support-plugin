@@ -22,6 +22,6 @@ public interface WorkflowValue<T> extends GenericDomValue<TypedValue<T>> {
   }
 
   @Attribute("name")
-  @NameValue
+  @NameValue(unique = false, referencable = false)
   GenericAttributeValue<String> getName();
 }

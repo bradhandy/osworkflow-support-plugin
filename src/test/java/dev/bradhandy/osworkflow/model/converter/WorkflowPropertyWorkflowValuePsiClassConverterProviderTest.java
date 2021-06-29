@@ -59,7 +59,7 @@ class WorkflowPropertyWorkflowValuePsiClassConverterProviderTest {
             codeInsightTestFixture,
             WorkflowValue.withName("class.name"),
             Register.class,
-            Register.withType("some-valid-type"));
+            Register.withId("my-register-id"));
     WorkflowValue<?> registerArgument = Iterables.getOnlyElement(registerClassArguments);
 
     assertThat(converterProvider.getCondition()).isNotNull();

@@ -14,7 +14,6 @@ import dev.bradhandy.osworkflow.OsWorkflowJavaModuleRequired;
 import dev.bradhandy.osworkflow.model.Register;
 import dev.bradhandy.osworkflow.model.WorkflowValue;
 import dev.bradhandy.testing.ModuleJdk;
-import dev.bradhandy.testing.PluginUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +49,7 @@ public class ArgumentWorkflowValuePsiClassConverterProviderTest {
             codeInsightTestFixture,
             WorkflowValue.withName("class.name"),
             Register.class,
-            Register.withType("some-valid-type"));
+            Register.withId("my-register-id"));
     WorkflowValue<?> registerClassArgument = Iterables.getOnlyElement(registerClassArguments);
 
     assertThat(converterProvider.getCondition()).isNotNull();

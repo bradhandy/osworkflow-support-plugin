@@ -65,12 +65,12 @@ class OsWorkflowModelTest {
 
     Register register =
         registerList.getRegisters().stream()
-            .filter(Register.withType("some-valid-type"))
+            .filter(Register.withId("my-register-id"))
             .findFirst()
             .orElse(null);
     assertThat(register).isNotNull();
     assertThat(register.getVariable().getStringValue()).isEqualTo("someVariableName");
-    assertThat(register.getId().getStringValue()).isEqualTo("my-id");
+    assertThat(register.getType().getStringValue()).isEqualTo("some-register-type");
 
     assertThat(register.getArguments())
         .hasSize(2)

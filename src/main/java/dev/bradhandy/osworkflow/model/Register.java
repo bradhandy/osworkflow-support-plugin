@@ -16,16 +16,16 @@ import java.util.function.Predicate;
     allowEmpty = true)
 public interface Register extends DomElement, ArgumentContainer {
 
-  static Predicate<Register> withType(String type) {
-    return new DomElementNamePredicate<>(type);
+  static Predicate<Register> withId(String id) {
+    return new DomElementNamePredicate<>(id);
   }
 
-  @Attribute("type")
-  @NameValue
-  GenericAttributeValue<String> getType();
-
   @Attribute("id")
+  @NameValue
   GenericAttributeValue<String> getId();
+
+  @Attribute("type")
+  GenericAttributeValue<String> getType();
 
   @Attribute("variable-name")
   GenericAttributeValue<String> getVariable();
