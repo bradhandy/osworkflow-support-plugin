@@ -52,4 +52,22 @@ public class OsWorkflowCodeCompletionTest {
     codeInsightTestFixture.type('\t');
     codeInsightTestFixture.checkResultByFile("function-class-completion/after/workflow.xml");
   }
+
+  @Test
+  void givenOsWorkflowFile_whenCaretInConditionArgumentElement_thenSuggestConditionsForCompletion(
+      JavaCodeInsightTestFixture codeInsightTestFixture) {
+    codeInsightTestFixture.copyDirectoryToProject("condition-class-completion/before", "content");
+    codeInsightTestFixture.configureFromTempProjectFile("content/workflow.xml");
+
+    codeInsightTestFixture.complete(CompletionType.SMART);
+
+    List<String> completionSuggestions = codeInsightTestFixture.getLookupElementStrings();
+    assertThat(completionSuggestions).isNotNull().isNotEmpty();
+    assertThat(completionSuggestions)
+        .contains("dev.bradhandy.NoopCondition")
+        .doesNotContain("dev.bradhandy.SomeOtherClass");
+
+    codeInsightTestFixture.type('\t');
+    codeInsightTestFixture.checkResultByFile("condition-class-completion/after/workflow.xml");
+  }
 }

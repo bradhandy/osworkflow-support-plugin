@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class OsWorkflowModelReferencesTest {
 
   @Test
-  void givenOsWorkflowFile_whenOpened_thenMetaTagWithClassNameHasReferences(
+  void givenOsWorkflowFile_whenMetaTagClassNameProvided_thenReferencesAreAvailable(
       JavaCodeInsightTestFixture codeInsightTestFixture) {
     PsiFile workflowPsiFile = codeInsightTestFixture.configureByFile("parsing/before/workflow.xml");
     assertThat(workflowPsiFile).isInstanceOf(XmlFile.class);
@@ -49,7 +49,7 @@ class OsWorkflowModelReferencesTest {
   }
 
   @Test
-  void givenOsWorkflowFile_whenRegisterClassNameIsValidRegisterType_thenReferencesAvailable(
+  void givenOsWorkflowFile_whenRegisterClassNameProvided_thenReferencesAvailable(
       JavaCodeInsightTestFixture codeInsightTestFixture) {
     codeInsightTestFixture.copyDirectoryToProject("parsing/before", "");
 
@@ -75,7 +75,7 @@ class OsWorkflowModelReferencesTest {
 
   @Test
   void
-      givenOsWorkflowFile_whenTriggerFunctionClassNameIsValidFunctionType_thenReferencesAreAvailable(
+      givenOsWorkflowFile_whenTriggerFunctionClassNameProvided_thenReferencesAreAvailable(
           JavaCodeInsightTestFixture codeInsightTestFixture) {
     codeInsightTestFixture.copyDirectoryToProject("parsing/before", "");
 
@@ -96,6 +96,32 @@ class OsWorkflowModelReferencesTest {
     PsiReference[] references =
         referenceProvider.getReferencesByElement(
             functionArgument.getXmlElement(), new ProcessingContext());
+    assertThat(references).isNotNull().isNotEmpty();
+  }
+
+  @Test
+  void
+      givenOsWorkflowFile_whenConditionClassNameProvided_thenReferencesAreAvailable(
+          JavaCodeInsightTestFixture codeInsightTestFixture) {
+    codeInsightTestFixture.copyDirectoryToProject("parsing/before", "");
+
+    PsiFile workflowPsiFile = codeInsightTestFixture.configureFromTempProjectFile("workflow.xml");
+    assertThat(workflowPsiFile).isInstanceOf(XmlFile.class);
+
+    List<WorkflowValue<?>> functionArguments =
+        findArgumentsForType(
+            workflowPsiFile,
+            codeInsightTestFixture,
+            WorkflowValue.withName("class.name"),
+            SingleCondition.class,
+            SingleCondition.withId("my-condition-id"));
+    WorkflowValue<PsiClass> conditionArgument =
+        (WorkflowValue<PsiClass>) Iterables.getOnlyElement(functionArguments);
+
+    GenericValueReferenceProvider referenceProvider = new GenericValueReferenceProvider();
+    PsiReference[] references =
+        referenceProvider.getReferencesByElement(
+            conditionArgument.getXmlElement(), new ProcessingContext());
     assertThat(references).isNotNull().isNotEmpty();
   }
 }

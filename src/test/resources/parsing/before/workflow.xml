@@ -31,4 +31,19 @@
       <function type="some-other-function" />
     </trigger-function>
   </trigger-functions>
+
+  <global-conditions>
+    <conditions type="AND">
+      <condition id="my-condition-id" type="my-condition-type" name="my-condition-name" negate="true">
+        <arg name="class.name">dev.bradhandy.NoopCondition</arg>
+        <arg name="someConditionArgument">someArgumentValue</arg>
+      </condition>
+      <conditions type="OR">
+        <condition id="my-nested-condition-id" type="my-nested-condition-type" name="my-nested-condition-name" negate="false">
+          <arg name="class.name">java.lang.Object</arg>
+          <arg name="someNestedConditionArgument">someNestedConditionValue</arg>
+        </condition>
+      </conditions>
+    </conditions>
+  </global-conditions>
 </workflow>

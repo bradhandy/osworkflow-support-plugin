@@ -79,6 +79,16 @@ public final class DomElementTestUtil {
             });
   }
 
+  public static GlobalConditions readGlobalConditions(
+      PsiFile workflowPsiFile, CodeInsightTestFixture codeInsightTestFixture) {
+    return runReadAction(
+        (Computable<? extends GlobalConditions>)
+            () -> {
+              Workflow workflow = readWorkflowElement(workflowPsiFile, codeInsightTestFixture);
+              return workflow.getGlobalConditions();
+            });
+  }
+
   public static <P extends ArgumentContainer> List<WorkflowValue<?>> findArgumentsForType(
       PsiFile workflowPsiFile,
       CodeInsightTestFixture codeInsightTestFixture,

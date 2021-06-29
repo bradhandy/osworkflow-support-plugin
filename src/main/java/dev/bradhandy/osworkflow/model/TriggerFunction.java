@@ -14,7 +14,7 @@ public interface TriggerFunction extends DomElement {
     return new DomElementNamePredicate<>(id);
   }
 
-  @Attribute
+  @Attribute("id")
   @NameValue
   GenericAttributeValue<String> getId();
 

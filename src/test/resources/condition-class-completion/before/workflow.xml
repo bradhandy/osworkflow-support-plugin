@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE workflow PUBLIC "-//OpenSymphony Group//DTD OSWorkflow 2.6//EN" "http://www.opensymphony.com/osworkflow/workflow_2_8.dtd">
+<workflow>
+  <meta name="someMetaProperty">someMetaValue</meta>
+  <meta name="someOtherMetaProperty">someOtherMetaValue</meta>
+  <meta name="someClassNameMetaProperty">java.lang.Object</meta>
+
+  <global-conditions>
+    <conditions type="AND">
+      <condition id="my-condition-id" type="my-condition-type" name="my-condition-name" negate="true">
+        <arg name="class.name"><![CDATA[<caret>]]></arg>
+        <arg name="someConditionArgument">someArgumentValue</arg>
+      </condition>
+    </conditions>
+  </global-conditions>
+</workflow>
