@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readGlobalConditions;
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readRegisterList;
+import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readStepList;
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readTriggerFunctionList;
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowFileElement;
 import static dev.bradhandy.osworkflow.model.DomElementTestUtil.readWorkflowProperty;
@@ -164,5 +165,19 @@ class OsWorkflowModelTest {
         .isEqualTo("my-nested-condition-name");
     assertThat(nestedSingleCondition.getNegate().getStringValue()).isEqualTo("false");
     assertThat(nestedSingleCondition.getNegate().getValue()).isFalse();
+  }
+
+  @Test
+  void givenOsWorkflowFile_whenOpened_thenStepsAreParsed(
+      JavaCodeInsightTestFixture codeInsightTestFixture) {
+    PsiFile workflowPsiFile = codeInsightTestFixture.configureByFile("parsing/before/workflow.xml");
+    assertThat(workflowPsiFile).isInstanceOf(XmlFile.class);
+
+    StepList stepList = readStepList(workflowPsiFile, codeInsightTestFixture);
+    assertThat(stepList).isNotNull();
+
+    Step step = stepList.getSteps().stream().filter(Step.withId("130")).findFirst().orElse(null);
+    assertThat(step).isNotNull();
+    assertThat(step.getName().getStringValue()).isEqualTo("My test step");
   }
 }

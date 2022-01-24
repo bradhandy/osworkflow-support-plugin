@@ -19,4 +19,7 @@ public interface Workflow extends DomElement {
 
   @SubTag("global-conditions")
   GlobalConditions getGlobalConditions();
+
+  @SubTag("steps")
+  StepList getStepList();
 }

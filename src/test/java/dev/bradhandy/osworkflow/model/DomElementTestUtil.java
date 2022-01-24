@@ -143,4 +143,14 @@ public final class DomElementTestUtil {
               return workflow.getTriggerFunctionList();
             });
   }
+
+  public static StepList readStepList(
+      PsiFile workflowPsiFile, JavaCodeInsightTestFixture codeInsightTestFixture) {
+    return runReadAction(
+        (Computable<? extends StepList>)
+            () -> {
+              Workflow workflow = readWorkflowElement(workflowPsiFile, codeInsightTestFixture);
+              return workflow.getStepList();
+            });
+  }
 }

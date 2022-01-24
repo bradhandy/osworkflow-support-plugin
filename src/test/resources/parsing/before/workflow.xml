@@ -46,4 +46,8 @@
       </conditions>
     </conditions>
   </global-conditions>
+
+  <steps>
+    <step id="130" name="My test step"></step>
+  </steps>
 </workflow>
